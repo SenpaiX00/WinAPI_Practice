@@ -1,11 +1,12 @@
 #include <iostream>
 #include <Windows.h>
 #include <stdio.h>
+#include <sysinfoapi.h>
 
 
 int main() {
     char chBuffer[] = "this is a test";
-    char lpBuf[252];
+    char lpBuf[sizeof(chBuffer)];
 
     BOOL bDIR;
     bDIR = CreateDirectory(
@@ -35,7 +36,7 @@ int main() {
     );
 
     ReadFile(h, &lpBuf, dw, 0, NULL);
-    std::cout << lpBuf << std::endl;
+    std::cout <<"READING FILE" <<lpBuf << std::endl;
 
     CloseHandle(h);
     
@@ -89,12 +90,20 @@ int main() {
     printf("comp name = %s\n", a);
 
 
-    //wide string version
+    //UTF wide string version
     wchar_t wBuffer[256];
     DWORD wdw = sizeof(wBuffer);
     BOOL wBCompName;
     wBCompName = GetComputerNameW(wBuffer, &wdw);
     std::wcout << "Wide computer name = " << wBuffer << std::endl;
+
+    SYSTEM_INFO SysInfo;
+
+    GetSystemInfo(&SysInfo);
+    std::cout << "num of processors: " << SysInfo.dwNumberOfProcessors << std::endl;
+    std::cout << "Page size: "<<SysInfo.dwPageSize << std::endl;
+    std::cout << "Processor Type"<<SysInfo.dwProcessorType << std::endl;
+    std::cout << "Processor Level = " << SysInfo.wProcessorLevel << std::endl;
 
 
     return 0;
